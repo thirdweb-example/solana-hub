@@ -3,9 +3,9 @@ import { ThirdwebSDK } from "@thirdweb-dev/solana";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import contractAddresses from "../const/contractAddresses";
-import styles from "../styles/Home.module.css";
 import CodeSnippet from "../components/guide/CodeSnippet";
 import codeSnippets from "../const/codeSnippets";
+import styles from "../styles/Home.module.css";
 
 // Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");

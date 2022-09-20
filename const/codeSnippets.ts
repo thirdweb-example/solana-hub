@@ -3,35 +3,29 @@ const codeSnippets = {
 import { ThirdwebSDK } from "@thirdweb-dev/solana";
 import { useConnection } from "@solana/wallet-adapter-react";
 
-export default function NFTDrop() {
+export default function NFTCollection() {
   const { connection } = useConnection();
-  const [thirdweb, setThirdweb] = useState<ThirdwebSDK | null>(null);
   const [loadingNfts, setLoadingNfts] = useState<boolean>(true);
-  const [nfts, setNfts] = useState([]);
+  const [nfts, setNfts] = useState<any[]>([]);
 
   useEffect(() => {
     if (connection) {
-      const sdk = new ThirdwebSDK(connection);
-      setThirdweb(sdk);
-    }
-  }, [connection]);
-
-  useEffect(() => {
-    if (thirdweb) {
       (async () => {
-        const contract = await thirdweb.getNFTCollection(
+        const sdk = new ThirdwebSDK(connection);
+        const contract = await sdk.getNFTCollection(
           "{{contractAddress}}"
         );
         const ns = await contract.getAll();
         setNfts(ns);
+        setLoadingNfts(false);
       })();
     }
-  }, [thirdweb]);
+  }, [connection]);
 
   return (
     <div>
       {!loadingNfts ? (
-        <div className={styles.nftBoxGrid}>
+        <div>
           {nfts?.map((nft) => (
             <div key={nft.id.toString()}>
               <img src={nft.image} />
@@ -50,27 +44,44 @@ export default function NFTDrop() {
 import { ThirdwebSDK } from "@thirdweb-dev/solana";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+
+// Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export default function NFTDrop() {
+  const wallet = useWallet();
   const { connection } = useConnection();
+  const [thirdweb, setThirdweb] = useState<ThirdwebSDK | null>(null);
 
-  async function claimNft() {
-    const thirdweb = new ThirdwebSDK(connection);
-    const contract = await thirdweb.getNFTDrop("{{contractAddress}}");
+  useEffect(() => {
+    if (connection) {
+      const sdk = new ThirdwebSDK(connection);
+      setThirdweb(sdk);
+    }
+  }, [connection]);
+
+  useEffect(() => {
+    if (thirdweb && wallet.connected) {
+      thirdweb.wallet.connect(wallet);
+    }
+  }, [thirdweb, wallet]);
+
+  const claimNft = async () => {
+    const contract = await thirdweb?.getNFTDrop("{{contractAddress}}");
     const tx = await contract?.claim();
   }
 
   return (
     <div>
-        <img src={"yellow_star.png"} />
-        {wallet.connected ? (
-          <button onClick={claimNft}>
-            {claiming ? "Claiming..." : "Claim NFT"}
-          </button>
-        ) : (
-          <WalletMultiButton />
-        )}
+      <img src={"/yellow_star.png"}/>
+
+      {wallet.connected ? (
+        <button onClick={claimNft}>
+          Claim NFT
+        </button>
+      ) : (
+        <WalletMultiButton />
+      )}
     </div>
   );
 }`,
@@ -79,6 +90,8 @@ export default function NFTDrop() {
 import { ThirdwebSDK } from "@thirdweb-dev/solana";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+
+// Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export default function Token() {
@@ -88,7 +101,6 @@ export default function Token() {
   const [totalSupply, setTotalSupply] = useState<string>("Loading...");
   const [balance, setBalance] = useState<string>("Loading...");
 
-  // useSDK
   useEffect(() => {
     if (connection) {
       const sdk = new ThirdwebSDK(connection);
@@ -96,44 +108,32 @@ export default function Token() {
     }
   }, [connection]);
 
-  // ConnectWallet
   useEffect(() => {
     if (thirdweb && wallet.connected) {
       thirdweb.wallet.connect(wallet);
     }
   }, [thirdweb, wallet]);
 
-  // useToken
   async function loadTokenContract() {
     return await thirdweb?.getToken("{{contractAddress}}");
   }
 
-  // useTokenBalance
   useEffect(() => {
     if (thirdweb && wallet.connected) {
       (async () => {
-        try {
-          const token = await loadTokenContract();
-          const b = await token?.balance();
-          setBalance(b?.displayValue || "0");
-        } catch (error) {
-          console.error(error);
-        }
+        const token = await loadTokenContract();
+        const b = await token?.balance();
+        setBalance(b?.displayValue || "0");
       })();
     }
   }, [thirdweb, wallet]);
 
-  // useTotalSupply
   useEffect(() => {
     if (thirdweb) {
       (async () => {
-        try {
-          const token = await loadTokenContract();
-          const s = await token?.totalSupply();
-          setTotalSupply(s?.displayValue || "0");
-        } catch (error) {
-          console.error(error);
-        }
+        const token = await loadTokenContract();
+        const s = await token?.totalSupply();
+        setTotalSupply(s?.displayValue || "0");
       })();
     }
   }, [thirdweb]);

@@ -8,10 +8,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      {/* Content */}
       <div className={styles.container}>
-        {/* Top Section */}
-
         <div className={styles.iconContainer}>
           <img src={"/thirdweb.svg"} className={styles.icon} />
           <img src={"/sol.png"} className={styles.icon} />
