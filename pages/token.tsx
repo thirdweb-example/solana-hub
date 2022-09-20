@@ -32,32 +32,12 @@ export default function Token() {
     }
   }, [thirdweb, wallet]);
 
-  // useToken
-  async function loadTokenContract() {
-    return await thirdweb?.getToken(contractAddresses[2].address);
-  }
-
-  // useTokenBalance
-  useEffect(() => {
-    if (thirdweb && wallet.connected) {
-      (async () => {
-        try {
-          const token = await loadTokenContract();
-          const b = await token?.balance();
-          setBalance(b?.displayValue || "0");
-        } catch (error) {
-          console.error(error);
-        }
-      })();
-    }
-  }, [thirdweb, wallet]);
-
   // useTotalSupply
   useEffect(() => {
     if (thirdweb) {
       (async () => {
         try {
-          const token = await loadTokenContract();
+          const token = await thirdweb?.getToken(contractAddresses[2].address);
           const s = await token?.totalSupply();
           setTotalSupply(s?.displayValue || "0");
         } catch (error) {
@@ -90,17 +70,6 @@ export default function Token() {
           <div className={styles.tokenItem}>
             <h3 className={styles.tokenLabel}>Total Supply</h3>
             <p className={styles.tokenValue}>{totalSupply}</p>
-          </div>
-
-          {/* Balance */}
-          <div className={styles.tokenItem}>
-            <h3 className={styles.tokenLabel}>Your Balance</h3>
-
-            {wallet.connected ? (
-              <p className={styles.tokenValue}>{balance}</p>
-            ) : (
-              <WalletMultiButton />
-            )}
           </div>
         </div>
       </div>
