@@ -105,7 +105,7 @@ export default function Token() {
 
   // useToken
   async function loadTokenContract() {
-    return await thirdweb?.getToken(contractAddresses[2].address);
+    return await thirdweb?.getToken("{{contractAddress}}");
   }
 
   // useTokenBalance
