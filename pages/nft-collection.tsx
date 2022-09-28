@@ -1,30 +1,15 @@
-import { useEffect, useState } from "react";
-import { ThirdwebSDK } from "@thirdweb-dev/solana";
-import { useConnection } from "@solana/wallet-adapter-react";
 import contractAddresses from "../const/contractAddresses";
 import CodeSnippet from "../components/guide/CodeSnippet";
 import codeSnippets from "../const/codeSnippets";
 import styles from "../styles/Home.module.css";
+import { useNFTs, useProgram } from "@thirdweb-dev/react/solana";
 
 export default function NFTCollection() {
-  const { connection } = useConnection();
-  const [loadingNfts, setLoadingNfts] = useState<boolean>(true);
-  const [nfts, setNfts] = useState<any[]>([]);
-
-  // useSDK
-  useEffect(() => {
-    if (connection) {
-      (async () => {
-        const sdk = new ThirdwebSDK(connection);
-        const contract = await sdk.getNFTCollection(
-          contractAddresses[1].address
-        );
-        const ns = await contract.getAll();
-        setNfts(ns);
-        setLoadingNfts(false);
-      })();
-    }
-  }, [connection]);
+  const programQuery = useProgram(
+    contractAddresses[1].address,
+    "nft-collection"
+  );
+  const allQuery = useNFTs(programQuery.data);
 
   return (
     <div className={styles.container}>
@@ -47,11 +32,11 @@ export default function NFTCollection() {
           </p>
         </div>
 
-        {!loadingNfts ? (
+        {!allQuery.isLoading ? (
           <div className={styles.nftBoxGrid}>
-            {nfts?.map((nft) => (
-              <div className={styles.nftBox} key={nft.id.toString()}>
-                <img src={nft.image} className={styles.nftMedia} />
+            {allQuery.data?.map((nft) => (
+              <div className={styles.nftBox} key={nft.id?.toString() || ""}>
+                <img src={nft.image || ""} className={styles.nftMedia} />
                 <h3>{nft.name}</h3>
               </div>
             ))}

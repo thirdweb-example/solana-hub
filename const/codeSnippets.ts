@@ -1,24 +1,11 @@
 const codeSnippets = {
   nftCollection: `export default function NFTCollection() {
-  const { connection } = useConnection();
-  const sdk = useSDK(connection);
-  const [nfts, setNfts] = useState<any[]>([]);
-  
-  useEffect(() => {
-    if (connection) {
-      (async () => {
-        const contract = await sdk.getNFTCollection(
-          "{{contractAddress}}"
-        );
-        const ns = await contract.getAll();
-        setNfts(ns);
-      })();
-    }
-  }, [connection]);
+  const program = useProgram(programAddress, "nft-collection");
+  const nfts = useNFTs(program.data);
 
   return (
     <div>
-      {nfts?.map((nft) => (
+      {nfts.data?.map((nft) => (
         <div key={nft.id.toString()}>
           <img src={nft.image} />
           <h3>{nft.name}</h3>
@@ -30,21 +17,16 @@ const codeSnippets = {
 
   nftDrop: `export default function NFTDrop() {
   const wallet = useWallet();
-  const { connection } = useConnection();
-  const sdk = useSDK(connection, wallet);
-
-  const claimNft = async () => {
-    const contract = await sdk?.getNFTDrop("{{contractAddress}}");
-    const tx = await contract?.claim();
-  }
+  const program = useProgram(programAddress, "nft-drop");
+  const claim = useClaimNFT(program.data);
+  const quantityToClaim = 1;
 
   return (
     <div>
       <img src={"/yellow_star.png"}/>
-
       {wallet.connected ? (
-        <button onClick={claimNft}>
-          Claim NFT
+        <button onClick={() => claim.mutate(quantityToClaim)}>
+          {claim.isLoading ? "Claiming..." : "Claim NFT"}
         </button>
       ) : (
         <WalletMultiButton />
@@ -54,24 +36,13 @@ const codeSnippets = {
 }`,
 
   token: `export default function Token() {
-  const { connection } = useConnection();
-  const sdk = useSDK(connection);
-  const [totalSupply, setTotalSupply] = useState<string>("Loading...");
-
-  useEffect(() => {
-    if (sdk) {
-      (async () => {
-        const token = await sdk.getToken("{{contractAddress}}");
-        const s = await token?.totalSupply();
-        setTotalSupply(s?.displayValue || "0");
-      })();
-    }
-  }, [sdk]);
+  const program = useProgram(programAddress, "token");
+  const supply = useTokenSupply(program.data);
 
   return (
     <div>
       <h3>Total Supply</h3>
-      <p>{totalSupply}</p>
+      <p>{supply.isLoading ? "Loading..." : supply.data?.displayValue}</p>
     </div>
   );
 }`,

@@ -1,51 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { ThirdwebSDK } from "@thirdweb-dev/solana";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import styles from "../styles/Home.module.css";
 import contractAddresses from "../const/contractAddresses";
 import CodeSnippet from "../components/guide/CodeSnippet";
 import codeSnippets from "../const/codeSnippets";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useProgram, useTokenSupply } from "@thirdweb-dev/react/solana";
 
 // Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export default function Token() {
-  const { connection } = useConnection();
-  const wallet = useWallet();
-  const [thirdweb, setThirdweb] = useState<ThirdwebSDK | null>(null);
-  const [totalSupply, setTotalSupply] = useState<string>("Loading...");
-  const [balance, setBalance] = useState<string>("Loading...");
-
-  // useSDK
-  useEffect(() => {
-    if (connection) {
-      const sdk = new ThirdwebSDK(connection);
-      setThirdweb(sdk);
-    }
-  }, [connection]);
-
-  // ConnectWallet
-  useEffect(() => {
-    if (thirdweb && wallet.connected) {
-      thirdweb.wallet.connect(wallet);
-    }
-  }, [thirdweb, wallet]);
-
-  // useTotalSupply
-  useEffect(() => {
-    if (thirdweb) {
-      (async () => {
-        try {
-          const token = await thirdweb?.getToken(contractAddresses[2].address);
-          const s = await token?.totalSupply();
-          setTotalSupply(s?.displayValue || "0");
-        } catch (error) {
-          console.error(error);
-        }
-      })();
-    }
-  }, [thirdweb]);
+  const programQuery = useProgram(contractAddresses[2].address, "token");
+  const balanceQuery = useTokenSupply(programQuery.data);
 
   return (
     <div className={styles.container}>
@@ -69,7 +33,11 @@ export default function Token() {
           {/* Total Supply */}
           <div className={styles.tokenItem}>
             <h3 className={styles.tokenLabel}>Total Supply</h3>
-            <p className={styles.tokenValue}>{totalSupply}</p>
+            <p className={styles.tokenValue}>
+              {balanceQuery.isLoading
+                ? "Loading..."
+                : balanceQuery.data?.displayValue}
+            </p>
           </div>
         </div>
       </div>

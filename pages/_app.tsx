@@ -1,16 +1,19 @@
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
+import { ThirdwebProvider } from "@thirdweb-dev/react/solana";
 import type { AppProps } from "next/app";
 import ThirdwebGuideFooter from "../components/guide/ThirdwebGuideFooter";
 import Header from "../components/Header";
-import { WalletContextProvider } from "../contexts/ContextProvider";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <WalletContextProvider>
-      <Header />
-      <Component {...pageProps} />
-      <ThirdwebGuideFooter />
-    </WalletContextProvider>
+    <ThirdwebProvider endpoint={"devnet"}>
+      <WalletModalProvider>
+        <Header />
+        <Component {...pageProps} />
+        <ThirdwebGuideFooter />
+      </WalletModalProvider>
+    </ThirdwebProvider>
   );
 }
 
