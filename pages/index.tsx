@@ -18,7 +18,7 @@ const Home: NextPage = () => {
           Explore what you can do with thirdweb&rsquo;s brand new{" "}
           <b>
             <a
-              href="https://github.com/thirdweb-dev/js/tree/main/packages/solana"
+              href="https://portal.thirdweb.com/solana"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.purple}
@@ -50,7 +50,7 @@ const Home: NextPage = () => {
         <a
           className={`${styles.mainButton} ${styles.bigSpacerTop} ${styles.noUnderline}`}
           role="button"
-          href="https://portal.thirdweb.com/"
+          href="https://portal.thirdweb.com/solana"
           target="_blank"
           rel="noopener noreferrer"
         >
