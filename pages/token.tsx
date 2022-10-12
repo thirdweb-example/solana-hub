@@ -22,7 +22,7 @@ export default function Token() {
           <p>
             <a
               className={styles.lightPurple}
-              href="https://portal.thirdweb.com/pre-built-contracts/token"
+              href="https://portal.thirdweb.com/solana/programs/tokens"
             >
               Check out the documentation here.
             </a>

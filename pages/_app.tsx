@@ -7,7 +7,7 @@ import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebProvider endpoint={"devnet"}>
+    <ThirdwebProvider network={"devnet"}>
       <WalletModalProvider>
         <Header />
         <Component {...pageProps} />

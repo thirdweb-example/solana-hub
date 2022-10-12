@@ -31,7 +31,7 @@ export default function NFTDrop() {
           <p>
             <a
               className={styles.lightPurple}
-              href="https://portal.thirdweb.com/pre-built-contracts/nft-drop"
+              href="https://portal.thirdweb.com/solana/programs/nft-drops"
             >
               Check out the documentation here.
             </a>
@@ -48,17 +48,24 @@ export default function NFTDrop() {
           <button
             className={styles.mainButton}
             onClick={() =>
-              claim.mutate(1, {
-                onError: (error) => {
-                  console.error(error);
-                  alert(
-                    "Something went wrong. Check the console for more details."
-                  );
-                },
-              })
+              claim.mutate(
+                { amount: 1 },
+                {
+                  onError: (error) => {
+                    console.error(error);
+                    alert(
+                      "Something went wrong. Check the console for more details."
+                    );
+                  },
+                }
+              )
             }
           >
-            {claim.isLoading ? "Claiming..." : "Claim NFT"}
+            {claim.isLoading
+              ? "Claiming..."
+              : claim.isSuccess
+              ? "Success!"
+              : "Claim NFT"}
           </button>
         ) : (
           <WalletMultiButton />

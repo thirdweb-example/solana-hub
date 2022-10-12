@@ -2,7 +2,7 @@ const contractAddresses = [
   {
     name: "NFT Drop",
     description: "Claimable drop of one-of-one NFTs",
-    address: "9KNKSTHi3SELLsmSiSjy8mNrPAQ85xrMKx8EbLSD2rvH",
+    address: "8AHNXo9SMmtna6Se4j4vP1gqw9DDzTFnMhcyT8CnyStZ",
     link: `/nft-drop`,
     icon: `/icons/drop.webp`,
   },

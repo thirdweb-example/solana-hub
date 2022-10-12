@@ -3,6 +3,7 @@ import CodeSnippet from "../components/guide/CodeSnippet";
 import codeSnippets from "../const/codeSnippets";
 import styles from "../styles/Home.module.css";
 import { useNFTs, useProgram } from "@thirdweb-dev/react/solana";
+import { ThirdwebNftMedia } from "@thirdweb-dev/react";
 
 export default function NFTCollection() {
   const programQuery = useProgram(
@@ -25,7 +26,7 @@ export default function NFTCollection() {
           <p>
             <a
               className={styles.lightPurple}
-              href="https://portal.thirdweb.com/pre-built-contracts/nft-collection"
+              href="https://portal.thirdweb.com/solana/programs/nft-collections"
             >
               Check out the documentation here.
             </a>
@@ -35,9 +36,15 @@ export default function NFTCollection() {
         {!allQuery.isLoading ? (
           <div className={styles.nftBoxGrid}>
             {allQuery.data?.map((nft) => (
-              <div className={styles.nftBox} key={nft.id?.toString() || ""}>
-                <img src={nft.image || ""} className={styles.nftMedia} />
-                <h3>{nft.name}</h3>
+              <div
+                className={styles.nftBox}
+                key={nft.metadata.id?.toString() || ""}
+              >
+                <ThirdwebNftMedia
+                  metadata={nft.metadata}
+                  className={styles.nftMedia}
+                />
+                <h3>{nft.metadata.name}</h3>
               </div>
             ))}
           </div>

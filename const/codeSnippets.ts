@@ -19,13 +19,12 @@ const codeSnippets = {
   const wallet = useWallet();
   const program = useProgram(programAddress, "nft-drop");
   const claim = useClaimNFT(program.data);
-  const quantityToClaim = 1;
 
   return (
     <div>
       <img src={"/yellow_star.png"}/>
       {wallet.connected ? (
-        <button onClick={() => claim.mutate(quantityToClaim)}>
+        <button onClick={() => claim.mutate({ amount: 1 })}>
           {claim.isLoading ? "Claiming..." : "Claim NFT"}
         </button>
       ) : (
