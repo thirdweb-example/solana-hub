@@ -6,11 +6,11 @@ import { useNFTs, useProgram } from "@thirdweb-dev/react/solana";
 import { ThirdwebNftMedia } from "@thirdweb-dev/react";
 
 export default function NFTCollection() {
-  const programQuery = useProgram(
+  const { program } = useProgram(
     contractAddresses[1].address,
     "nft-collection"
   );
-  const allQuery = useNFTs(programQuery.data);
+  const allQuery = useNFTs(program);
 
   return (
     <div className={styles.container}>

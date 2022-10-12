@@ -1,7 +1,7 @@
 const codeSnippets = {
   nftCollection: `export default function NFTCollection() {
-  const program = useProgram(programAddress, "nft-collection");
-  const nfts = useNFTs(program.data);
+  const { program } = useProgram(programAddress, "nft-collection");
+  const nfts = useNFTs(program);
 
   return (
     <div>
@@ -17,8 +17,8 @@ const codeSnippets = {
 
   nftDrop: `export default function NFTDrop() {
   const wallet = useWallet();
-  const program = useProgram(programAddress, "nft-drop");
-  const claim = useClaimNFT(program.data);
+  const { program } = useProgram(programAddress, "nft-drop");
+  const claim = useClaimNFT(program);
 
   return (
     <div>
@@ -35,8 +35,8 @@ const codeSnippets = {
 }`,
 
   token: `export default function Token() {
-  const program = useProgram(programAddress, "token");
-  const supply = useTokenSupply(program.data);
+  const { program } = useProgram(programAddress, "token");
+  const supply = useTokenSupply(program);
 
   return (
     <div>

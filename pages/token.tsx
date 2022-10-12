@@ -8,8 +8,8 @@ import { useProgram, useTokenSupply } from "@thirdweb-dev/react/solana";
 require("@solana/wallet-adapter-react-ui/styles.css");
 
 export default function Token() {
-  const programQuery = useProgram(contractAddresses[2].address, "token");
-  const balanceQuery = useTokenSupply(programQuery.data);
+  const { program } = useProgram(contractAddresses[2].address, "token");
+  const balanceQuery = useTokenSupply(program);
 
   return (
     <div className={styles.container}>

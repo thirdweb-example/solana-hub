@@ -11,8 +11,8 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 
 export default function NFTDrop() {
   const wallet = useWallet();
-  const programQuery = useProgram(contractAddresses[0].address, "nft-drop");
-  const claim = useClaimNFT(programQuery.data);
+  const { program } = useProgram(contractAddresses[0].address, "nft-drop");
+  const claim = useClaimNFT(program);
 
   return (
     <div className={styles.container}>
